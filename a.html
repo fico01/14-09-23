@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopots - Tela de Entrada</title>
+    <link rel="icon" type="imagex/png" href="unnamed.png">
+    <style>
+        body {
+            background-image:url(maxresdefault.jpg) ;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-size: cover;
+        }
+        #entrada {
+            display: block;
+            border: 5px solid black;
+            border-radius: 10px;
+            width: 300px;
+            margin: auto;
+            background-color: white;
+        }
+        #confirmacao {
+            border: 5px solid black;
+            width: 300px;
+            margin: auto;
+            background-color: white;
+            display: none;
+            border-radius: 10px;
+        }
+        .gameGrid {
+            border: 5px solid black;
+            width: 300px;
+            margin: auto;
+            background-color: white;
+            display: none;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Tela de Entrada -->
+    <div id="entrada" style="box-sizing: border-box;">
+        <h1>Bem-vindo ao Stopots</h1>
+        <p>Insira seu nome:</p>
+        <input type="text" id="nomeJogador" placeholder="Seu nome">
+        <br>
+        <button onclick="confirmarEntrada()">Entrar</button>
+    </div>
+
+    <!-- Tela de Confirmação -->
+    <div id="confirmacao">
+        <h1>Olá, <span id="nomeConfirmado"></span>!</h1>
+        <p>Seu nome foi confirmado e gravado na sessão.</p>
+        <h2>Categorias</h2>
+        <input type="text" id="categories" placeholder="Categoria1, Categoria2, Categoria3, ...">
+        <button onclick="startGame()">Iniciar Jogo</button>
+        
+        
+    </div><br>
+    <center><div id="gameGrid"></div></center>
+
+    <script>
+        function confirmarEntrada() {
+            const nomeJogador = document.getElementById("nomeJogador").value;
+            if (nomeJogador.trim() !== "") {
+                // Grava o nome na sessão
+                sessionStorage.setItem("nomeJogador", nomeJogador);
+
+                // Atualiza a tela para a tela de confirmação
+                document.getElementById("entrada").style.display = "none";
+                document.getElementById("confirmacao").style.display = "block";
+
+                // Exibe o nome confirmado
+                document.getElementById("nomeConfirmado").textContent = nomeJogador;
+            } else {
+                alert("Por favor, insira seu nome.");
+            }
+        }
+        function startGame() {
+            const categoriesInput = document.getElementById("categories");
+            const categories = categoriesInput.value.split(",").map(category => category.trim());
+            const gridContainer = document.getElementById("gameGrid");
+
+            if (categories.length === 0) {
+                alert("Por favor, insira pelo menos uma categoria.");
+                return;
+            }
+
+            // Cria a grade do jogo
+            const table = document.createElement("table");
+            const headerRow = document.createElement("tr");
+
+            categories.forEach(category => {
+                const th = document.createElement("th");
+                th.textContent = category;
+                headerRow.appendChild(th);
+            });
+
+            table.appendChild(headerRow);
+
+            for (let i = 0; i < 5; i++) {
+                const row = document.createElement("tr");
+
+                categories.forEach(category => {
+                    const td = document.createElement("td");
+                    const input = document.createElement("input");
+                    input.type = "text";
+                    td.appendChild(input);
+                    row.appendChild(td);
+                });
+
+                table.appendChild(row);
+            }
+
+            gridContainer.innerHTML = "";
+            gridContainer.appendChild(table);
+        }
+    </script>
+</body>
+</html>
